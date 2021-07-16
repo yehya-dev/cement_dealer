@@ -20,8 +20,8 @@
 - OTP user phone verification (Twilio)
 
 📷 Images <br><br>
-<img src="./screen/products.png" alt="products" width="150"/>
-<img src="./screen/menu.png" alt="menu" width="150"/>
-<img src="./screen/login.png" alt="login" width="150"/>
-<img src="./screen/cart.png" alt="cart" width="150"/>
-<img src="./screen/signup.png" alt="signup" width="150"/>
+<img src="./screen/products.png" alt="products" width="200"/>
+<img src="./screen/menu.png" alt="menu" width="200"/>
+<img src="./screen/login.png" alt="login" width="200"/>
+<img src="./screen/cart.png" alt="cart" width="200"/>
+<img src="./screen/signup.png" alt="signup" width="200"/>
