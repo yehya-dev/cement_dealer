@@ -1,0 +1,291 @@
+{% extends 'base.html' %} {% block head_access %}
+{% load static %}
+<title>Signup</title>
+{% endblock head_access %} {% block content %}
+<main>
+  <div class="flex p-1 bg-white place-content-center">
+    <div class="max-w-lg overflow-hidden">
+      {% if messages %}
+      <ul class="px-10 text-red-400">
+        {% for message in messages %}
+        <li class="p-3 border shadow-sm text-sm font-semibold">{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      <form
+        id="register-form"
+        @submit="registrationCheck"
+        method="POST"
+        class="w-full max-w-lg"
+      >
+        {% csrf_token %}
+        <div class="p-10 pb-6">
+          <div class="flex flex-wrap mb-6 -mx-3">
+            <div class="w-full px-3 mb-6 md:w-1/2 md:mb-0">
+              <label
+                class="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
+                for="grid-first-name"
+              >
+                First Name
+              </label>
+              <input
+                class="block w-full px-4 py-3 mb-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white"
+                id="grid-first-name"
+                type="text"
+                v-model.trim="firstName"
+                @blur="firstNameCheck"
+                name="firstName"
+              />
+              <p
+                class="text-red-400 text-xs"
+                v-if="registerFormErrors.firstName"
+              >
+                [[registerFormErrors.firstName]]
+              </p>
+            </div>
+            <div class="w-full px-3 md:w-1/2">
+              <label
+                class="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
+                for="grid-last-name"
+              >
+                Last Name
+              </label>
+              <input
+                class="block w-full px-4 py-3 mb-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
+                id="grid-last-name"
+                type="text"
+                v-model.trim="lastName"
+                @blur="lastNameCheck"
+                name="lastName"
+              />
+              <p
+                class="text-red-400 text-xs"
+                v-if="registerFormErrors.lastName"
+              >
+                [[registerFormErrors.lastName]]
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-wrap mb-6 -mx-3">
+            <div class="w-full px-3 mb-6 md:w-1/2 md:mb-0">
+              <label
+                class="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
+                for="grid-phone-number"
+              >
+                Phone Number
+              </label>
+              <div class="relative flex items-center">
+                <p class="absolute z-10 py-3 pl-2 mb-3 font-semibold text-gray-500">+91</p>
+                <input
+                class="block w-full pl-9 pr-4 py-3 mb-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white"
+                id="grid-phone-number"
+                type="tel"
+                v-model.trim="phoneNumber"
+                @blur="phoneNumberCheck"
+                name="phoneNumber"
+                />
+            </div>
+              <p
+                class="text-red-400 text-xs"
+                v-if="registerFormErrors.phoneNumber"
+              >
+                [[registerFormErrors.phoneNumber]]
+              </p>
+            </div>
+            <div class="w-full px-3 md:w-1/2">
+              <label
+                class="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
+                for="grid-phone-verification"
+              >
+                Phone Verification
+              </label>
+              <div class="relative flex items-center">
+              <button @click="getOTP" type="button" class="absolute z-10 py-3 px-2 mx-1 text-xs rounded right-0 mb-3 font-semibold text-gray-50 bg-gray-700 hover:bg-gray-600">
+              <img v-if="getOTPisLoading" src="{% static 'images/loaderwhite.svg' %}" class="w-4 h-4" alt="loading">
+              [[getOTPisLoading ? '' : 'GET OTP']]
+              </button>
+              <input
+                class="block w-full pl-4 pr-20 py-3 mb-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
+                id="grid-phone-verification"
+                v-model.trim="phoneOTP"
+                @blur="phoneOTPCheck"
+                type="text"
+                name="phoneOTP"
+              />
+            </div>
+            <p
+            class="text-xs"
+            :class="[registerFormErrors.phoneOTP.status ? 'text-green-500' : 'text-red-500']"
+            v-if="registerFormErrors.phoneOTP.message"
+          >
+            [[registerFormErrors.phoneOTP.message]]
+          </p>
+            </div>
+          </div>
+          <div class="flex flex-wrap -mx-3">
+            <div class="w-full px-3 mb-6">
+              <label
+                class="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
+                for="grid-gstin"
+              >
+                GSTIN
+              </label>
+              <input
+                class="block px-4 w-full py-3 mb-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded focus:outline-none focus:bg-white focus:border-gray-500"
+                id="grid-gstin"
+                type="text"
+                placeholder="Optional"
+                v-model.trim="GSTIN"
+                @blur="GSTINCheck"
+                name="GSTIN"
+              />
+              <p class="text-red-400 text-xs" v-if="registerFormErrors.GSTIN">
+                [[registerFormErrors.GSTIN]]
+              </p>
+            </div>
+            <div class="w-full px-3 mb-6">
+              <label
+                class="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
+                for="grid-password1"
+              >
+                Password
+              </label>
+              <input
+                class="block w-full px-4 py-3 mb-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
+                id="grid-password1"
+                type="password"
+                v-model="password1"
+                @blur="passwordCheck"
+                name="password1"
+              />
+            </div>
+            <div class="w-full px-3">
+              <label
+                class="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
+                for="grid-password2"
+              >
+                Confirm Password
+              </label>
+              <input
+                class="block w-full px-4 py-3 mb-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
+                id="grid-password2"
+                type="password"
+                v-model="password2"
+                @blur="passwordCheck"
+                name="password2"
+              />
+              <p
+                class="text-red-400 text-xs"
+                v-if="registerFormErrors.password"
+              >
+                [[registerFormErrors.password]]
+              </p>
+            </div>
+          </div>
+          <p
+            class="font-bold text-sm tracking-wide text-gray-700 uppercase my-4"
+          >
+            Address
+          </p>
+          <div class="flex flex-wrap m-6 mb-2 -mx-3">
+            <div class="w-full px-3 mb-6 md:w-1/2 md:mb-0">
+              <label
+                class="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
+                for="grid-landmark"
+              >
+                Landmark
+              </label>
+              <input
+                class="block w-full px-4 py-3 mb-4 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
+                id="grid-landmark"
+                type="text"
+                v-model="landmark"
+                @blur="landmarkCheck"
+                name="landmark"
+              />
+              <p
+                class="text-red-400 text-xs"
+                v-if="registerFormErrors.landmark"
+              >
+                [[registerFormErrors.landmark]]
+              </p>
+            </div>
+            <div class="w-full px-3 mb-6 md:w-1/2 md:mb-0">
+              <label
+                class="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
+                for="grid-town"
+              >
+                Town
+              </label>
+              <input
+                class="block w-full px-4 py-3 mb-4 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
+                id="grid-town"
+                type="text"
+                v-model="town"
+                @blur="townCheck"
+                name="town"
+              />
+              <p class="text-red-400 text-xs" v-if="registerFormErrors.town">
+                [[registerFormErrors.town]]
+              </p>
+            </div>
+            <div class="w-full px-3 mb-6 md:mt-6 md:w-1/2 md:mb-0">
+              <label
+                class="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
+                for="grid-district"
+              >
+                District
+              </label>
+              <div>
+                <select
+                  class="block w-full mb-4 px-4 py-3 pr-8 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
+                  id="grid-district"
+                  v-model="district"
+                  name="district"
+                >
+                  {% for district in districts %}
+                  <option value="{{district.0}}">{{district.1}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="w-full px-3 mb-6 md:mt-6 md:w-1/2 md:mb-0">
+              <label
+                class="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
+                for="grid-zip"
+              >
+                Pincode
+              </label>
+              <input
+                class="block w-full px-4 py-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
+                id="grid-zip"
+                type="text"
+                v-model="pincode"
+                @blur="pincodeCheck"
+                name="pincode"
+              />
+              <p class="text-red-400 text-xs" v-if="registerFormErrors.pincode">
+                [[registerFormErrors.pincode]]
+              </p>
+            </div>
+          </div>
+          <p class="text-gray-700 font-semibold text-xs mb-2" v-if="errorsInTheForm">
+            Please fill all the required fields before submitting.
+          </p>
+          <div class="flex items-center sm:mt-4">
+            <button
+              type="submit"
+              class="py-3 px-5 whitespace-nowrap text-gray-100 bg-gray-700 font-bold rounded-md shadow-sm"
+            >
+              Sign Up
+            </button>
+            <p class="ml-3 font-semibold">
+              Already have an account ?
+              <a href="{% url 'login' %}" class="text-indigo-600 underline">Login Here</a>
+            </p>
+          </div>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock content %}

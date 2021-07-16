@@ -1,0 +1,20 @@
+{% extends 'base.html' %} {% block head_access %}
+<title>Cart</title>
+{% endblock head_access %} {% block content %}
+<main>
+  <ul class="p-3 bg-gray-200 min-h-screen text-gray-600" ref="cartList">
+    <li v-for="order in currentOrderList" :key="order.id" class="cartitem flex justify-between border items-center shadow-md mb-3 overflow-hidden bg-gray-50 rounded-lg px-3 py-2">
+          <p class="whitespace-nowrap font-semibold text-xs w-5/6 overflow-hidden">[[order.product]]</p>
+          <div class="flex items-center justify-center">
+          <input class="quantity-inp w-2/4 px-1 py-1 font-semibold border mx-3 text-xs" type="number" :value="order.quantity" @change="showButton">
+          <button class="focus:outline-none hidden" @click="updateOrderQuantity($event, order.id)">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </button>
+          </div>
+          <button class="focus:outline-none" @click="deleteOrder(order.id)">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+          </button>
+    </li>
+  </ul>
+</main>
+{% endblock content %}

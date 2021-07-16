@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* .rise-up-enter-active,
+.rise-up-leave-active {
+  transition: all 0.2s ease;
+}
+.rise-up-enter-from,
+.rise-up-leave-to {
+  opacity: 0;
+  transform: rotateY(50deg);
+} */
+
+.push-right-enter-active,
+.push-right-leave-active {
+  transition: right 0.3s ease;
+}
+.push-right-enter-from,
+.push-right-leave-to {
+  right: 100%;
+}
+
+.fade-in-enter-active,
+.fade-in-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-in-enter-from,
+.fade-in-leave-to {
+  opacity: 0;
+}
+

@@ -1,0 +1,18 @@
+{
+  "name": "cement_dealer",
+  "version": "1.0.0",
+  "description": "to run postcss and tailwindcss for a cement agencie web app made in django (python)",
+  "main": "index.js",
+  "scripts": {
+    "build": "postcss ./src/styles.css -o ../static/styles.css"
+  },
+  "author": "yehya usman",
+  "license": "ISC",
+  "dependencies": {
+    "autoprefixer": "^10.0.4",
+    "cssnano": "^4.1.10",
+    "postcss": "^8.1.13",
+    "postcss-cli": "^8.3.0",
+    "tailwindcss": "^2.0.1"
+  }
+}
