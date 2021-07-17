@@ -16,7 +16,7 @@
 - Social Links (Phone, Whatsapp etc)
 - REST endpoint for product details
 - Django Admin view to add products, brands etc
-- Automatic media compression
+- Automatic media compression, resizing 
 - OTP user phone verification (Twilio)
 
 📷 Images <br><br>
